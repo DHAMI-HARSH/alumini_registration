@@ -71,13 +71,23 @@ const ChartGrid = Recharts.CartesianGrid
 const ChartBar = Recharts.Bar
 const ChartPie = Recharts.Pie
 
-// ✅ ChartDonut as a specialized PieChart
-const ChartDonut = ({
+type ChartDonutProps = {
+  data: any[]
+  dataKey: string
+  nameKey: string
+  innerRadius?: number | string
+  outerRadius?: number | string
+  label?: boolean
+}
+
+const ChartDonut: React.FC<ChartDonutProps> = ({
   data,
   nameKey,
   dataKey,
-  ...props
-}: React.ComponentProps<typeof Recharts.Pie>) => {
+  innerRadius = 60,
+  outerRadius = 80,
+  label = true,
+}) => {
   return (
     <Recharts.PieChart>
       <Recharts.Pie
@@ -86,17 +96,15 @@ const ChartDonut = ({
         nameKey={nameKey}
         cx="50%"
         cy="50%"
-        innerRadius={60}
-        outerRadius={80}
-        label
-        {...props}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        label={label}
       />
       <Recharts.Tooltip />
       <Recharts.Legend />
     </Recharts.PieChart>
   )
 }
-
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
     ([, conf]) => conf.theme || conf.color
