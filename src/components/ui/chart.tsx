@@ -32,7 +32,7 @@ const ChartContainer = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
     config?: ChartConfig
-    children: React.ReactNode
+    children: React.ReactElement // ✅ Ensure a valid React element
   }
 >(({ id, className, children, config = {}, ...props }, ref) => {
   const uniqueId = React.useId()
@@ -47,18 +47,19 @@ const ChartContainer = React.forwardRef<
         {...props}
       >
         <ChartStyle id={chartId} config={config} />
-        <Recharts.ResponsiveContainer>{children}</Recharts.ResponsiveContainer>
+        <Recharts.ResponsiveContainer>
+          {children}
+        </Recharts.ResponsiveContainer>
       </div>
     </ChartContext.Provider>
   )
 })
 ChartContainer.displayName = "ChartContainer"
 
-// The actual chart containers — required for Recharts context
+// Chart primitives
 const ChartBarChart = Recharts.BarChart
 const ChartPieChart = Recharts.PieChart
 
-// Other components
 const ChartTitle = ({ children }: { children: React.ReactNode }) => (
   <h3 className="text-lg font-semibold">{children}</h3>
 )
@@ -69,6 +70,8 @@ const ChartYAxis = Recharts.YAxis
 const ChartGrid = Recharts.CartesianGrid
 const ChartBar = Recharts.Bar
 const ChartPie = Recharts.Pie
+
+// ✅ ChartDonut as a specialized PieChart
 const ChartDonut = ({
   data,
   nameKey,
@@ -124,6 +127,7 @@ ${colorConfig
   )
 }
 
+// ✅ Exports
 export {
   ChartContainer,
   ChartBarChart,
@@ -135,7 +139,6 @@ export {
   ChartYAxis,
   ChartGrid,
   ChartBar,
-  ChartDonut,
-
   ChartPie,
+  ChartDonut,
 }
